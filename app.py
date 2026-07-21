@@ -5,6 +5,8 @@
 import os
 import json
 import qrcode
+import requests
+import threading
 from io import BytesIO
 from datetime import datetime
 from flask import Flask, request, jsonify, render_template, send_file
@@ -108,6 +110,8 @@ def submit():
     # 检查是否已存在（按手机号去重）
     for entry in data:
         if entry["phone"] == digits:
+            submit_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            send_telegram(name, digits, feedback, submit_time)
             return jsonify({
                 "ok": True,
                 "message": "Thank you! Your number is already registered. / ကျေးဇူးတင်ပါတယ်၊ သင့်နံပါတ်မှတ်ပုံတင်ပြီးပါပြီ။",
