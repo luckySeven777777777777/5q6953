@@ -39,6 +39,35 @@ def get_public_url():
     return None
 
 
+def send_telegram(name, phone, feedback, submit_time):
+    """异步发送 Telegram 通知"""
+    bot_token = os.environ.get("TG_BOT_TOKEN", "").strip()
+    chat_id = os.environ.get("TG_CHAT_ID", "").strip()
+    if not bot_token or not chat_id:
+        return
+
+    msg = (
+        f"\U0001F4E5 <b>New Registration</b>\n\n"
+        f"\U0001F464 <b>Name:</b> {name}\n"
+        f"\U0001F4DE <b>Phone:</b> +95 {phone}\n"
+        f"\U0001F4AC <b>Feedback:</b> {feedback or 'None'}\n"
+        f"\U0001F550 <b>Time:</b> {submit_time}"
+    )
+
+    def _send():
+        try:
+            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            requests.post(url, json={
+                "chat_id": chat_id,
+                "text": msg,
+                "parse_mode": "HTML"
+            }, timeout=10)
+        except Exception:
+            pass
+
+    threading.Thread(target=_send, daemon=True).start()
+
+
 # ==================== 客户扫码页面 ====================
 @app.route("/")
 def index():
@@ -85,15 +114,19 @@ def submit():
                 "duplicate": True
             })
 
+    submit_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     entry = {
         "name": name,
         "phone": digits,
         "raw_input": phone,
         "feedback": feedback,
-        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "time": submit_time,
     }
     data.append(entry)
     save_data(data)
+
+    # 发送 Telegram 通知
+    send_telegram(name, digits, feedback, submit_time)
 
     return jsonify({
         "ok": True,
