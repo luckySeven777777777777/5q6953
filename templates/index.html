@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>foodpanda - Register</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans Myanmar', 'Helvetica Neue', sans-serif;
+            background: #f7f7f7;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: #fff;
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.06);
+        }
+
+        /* Header */
+        .header {
+            background: #D70F64;
+            padding: 28px 24px 20px;
+            text-align: center;
+            border-radius: 0 0 24px 24px;
+            position: relative;
+        }
+        .header .logo {
+            font-size: 30px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+        .header .logo span {
+            color: #FFD1E4;
+            font-weight: 600;
+        }
+        .header .tagline {
+            font-size: 12px;
+            color: rgba(255,255,255,0.75);
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Myanmar flag strip */
+        .flag-strip {
+            display: flex;
+            height: 4px;
+        }
+        .flag-strip div:nth-child(1) { flex:1; background: #FECB00; }
+        .flag-strip div:nth-child(2) { flex:1; background: #34B233; }
+        .flag-strip div:nth-child(3) { flex:1; background: #EA2839; }
+
+        /* Form section */
+        .form-section {
+            padding: 24px 24px 40px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+        .section-sub {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+        }
+        .field label .required {
+            color: #D70F64;
+        }
+
+        /* Input */
+        .input-box {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 10px;
+            background: #fafafa;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .input-box:focus-within {
+            border-color: #D70F64;
+            background: #fff;
+        }
+        .input-box .icon {
+            padding: 0 0 0 14px;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .input-box input,
+        .input-box textarea {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            padding: 14px 14px 14px 10px;
+            font-size: 15px;
+            color: #222;
+            font-family: inherit;
+            resize: none;
+        }
+        .input-box input::placeholder,
+        .input-box textarea::placeholder {
+            color: #bbb;
+        }
+        .input-box textarea {
+            min-height: 100px;
+        }
+
+        /* Phone prefix */
+        .phone-box {
+            display: flex;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 10px;
+            background: #fafafa;
+            overflow: hidden;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .phone-box:focus-within {
+            border-color: #D70F64;
+            background: #fff;
+        }
+        .phone-box .prefix {
+            background: #f0f0f0;
+            padding: 14px 12px 14px 14px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #444;
+            border-right: 1.5px solid #e0e0e0;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .phone-box .prefix .mm-flag {
+            font-size: 18px;
+        }
+        .phone-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            padding: 14px;
+            font-size: 15px;
+            color: #222;
+            font-family: inherit;
+        }
+        .phone-box input::placeholder {
+            color: #bbb;
+        }
+
+        .hint {
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        /* Submit button */
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: #D70F64;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            margin-top: 8px;
+            transition: background 0.15s, transform 0.12s;
+        }
+        .btn-submit:active {
+            transform: scale(0.98);
+            background: #C00D58;
+        }
+        .btn-submit:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        /* Message */
+        .msg {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            display: none;
+            line-height: 1.5;
+        }
+        .msg.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+        .msg.error {
+            background: #fce4ec;
+            color: #C62828;
+            display: block;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 0 24px 32px;
+            font-size: 11px;
+            color: #c0c0c0;
+        }
+        .footer a {
+            color: #D70F64;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">food<span>panda</span></div>
+            <div class="tagline">Myanmar Registration</div>
+        </div>
+        <div class="flag-strip"><div></div><div></div><div></div></div>
+
+        <!-- Form -->
+        <div class="form-section">
+            <div class="section-title">Welcome! &#127474;&#127476;</div>
+            <p class="section-sub">
+                မှတ်ပုံတင်ရန် အောက်ပါအချက်အလက်များဖြည့်ပါ<br>
+                Please fill in your details below
+            </p>
+
+            <form id="regForm">
+                <!-- Name -->
+                <div class="field">
+                    <label>Your Name <span class="required">*</span> / အမည်</label>
+                    <div class="input-box">
+                        <span class="icon">&#128100;</span>
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter your name / အမည်ထည့်ပါ"
+                            autocomplete="name"
+                            required
+                            maxlength="60"
+                        >
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="field">
+                    <label>Phone Number <span class="required">*</span> / ဖုန်းနံပါတ်</label>
+                    <div class="phone-box">
+                        <span class="prefix"><span class="mm-flag">&#127474;&#127476;</span> +95</span>
+                        <input
+                            type="tel"
+                            id="phone"
+                            placeholder="9xxxxxxxxx"
+                            inputmode="numeric"
+                            autocomplete="tel"
+                            required
+                            maxlength="12"
+                        >
+                    </div>
+                    <p class="hint">Example: 9xxxxxxxxx (no leading 0)</p>
+                </div>
+
+                <!-- Feedback -->
+                <div class="field">
+                    <label>Feedback / မှတ်ချက်</label>
+                    <div class="input-box">
+                        <span class="icon" style="align-self:flex-start;padding-top:15px;">&#128172;</span>
+                        <textarea
+                            id="feedback"
+                            placeholder="Share your thoughts or requests... / သင့်ထင်မြင်ချက်များကိုမျှဝေပါ..."
+                            maxlength="500"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    Submit / ပေးပို့မည်
+                </button>
+            </form>
+
+            <div id="msgBox" class="msg"></div>
+        </div>
+
+        <div class="footer">
+            &copy; 2026 foodpanda Myanmar · <a href="#">Privacy Policy</a>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('regForm');
+        const nameInput = document.getElementById('name');
+        const phoneInput = document.getElementById('phone');
+        const feedbackInput = document.getElementById('feedback');
+        const btn = document.getElementById('submitBtn');
+        const msgBox = document.getElementById('msgBox');
+
+        // 手机号只允许数字
+        phoneInput.addEventListener('input', () => {
+            phoneInput.value = phoneInput.value.replace(/[^0-9]/g, '');
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nameVal = nameInput.value.trim();
+            const phoneVal = phoneInput.value.trim();
+            const feedbackVal = feedbackInput.value.trim();
+
+            if (!nameVal) {
+                showMsg('Please enter your name / အမည်ထည့်ပါ', 'error');
+                nameInput.focus();
+                return;
+            }
+            if (!phoneVal) {
+                showMsg('Please enter your phone number / ဖုန်းနံပါတ်ထည့်ပါ', 'error');
+                phoneInput.focus();
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
+            msgBox.className = 'msg';
+            msgBox.style.display = 'none';
+
+            try {
+                const body = new URLSearchParams();
+                body.append('name', nameVal);
+                body.append('phone', '+95' + phoneVal);
+                body.append('feedback', feedbackVal);
+
+                const resp = await fetch('/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: body.toString()
+                });
+                const data = await resp.json();
+
+                if (data.ok) {
+                    showMsg(data.message, 'success');
+                    if (!data.duplicate) {
+                        nameInput.value = '';
+                        phoneInput.value = '';
+                        feedbackInput.value = '';
+                    }
+                } else {
+                    showMsg(data.message, 'error');
+                }
+            } catch (err) {
+                showMsg('Network error. Please try again. / ကွန်ယက်အမှား၊ ထပ်စမ်းကြည့်ပါ', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Submit / ပေးပို့မည်';
+            }
+        });
+
+        function showMsg(text, type) {
+            msgBox.textContent = text;
+            msgBox.className = 'msg ' + type;
+            msgBox.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
